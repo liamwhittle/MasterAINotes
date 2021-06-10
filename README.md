@@ -1,2 +1,2 @@
-# master_AI_notes
-My pre-exam study notes from the Master of AI. Mostly Latex, some Jupyter notebooks
+# MasterAINotes
+My pre-exam and general study notes from the Master of AI. Mostly Latex, some Jupyter notebooks.
