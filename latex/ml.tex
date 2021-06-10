@@ -1,0 +1,384 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{mathtools}
+
+\title{ML - Master Notes}
+
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}
+
+\begin{document}
+	\maketitle
+	
+	\section{Elements of ML}
+	
+	\subsection{Key Terms}
+	
+	\begin{itemize}
+		 
+		\item inference, prediction, classification, regression
+		\item training set, test set, generalisation
+		\item supervised learning, unsupervised learning
+		\item clustering
+		\item parametric model, non-parametric model
+		\item mathematical optimization
+		\item sum of squared errors: $E(w) = \frac{1}{2}\sum{[y(x_n, w) - t_n]^2}$ | $w* = argmin_w E(w)$
+		\item closed form solutions/ analytic solutions, iterative algorithms
+		\item over fitting, under fitting
+		\item root mean squared error: $E_{RMS} := \sqrt{2E(w*)/N}$ $\implies$ compares different data set sizes equally
+		\item Regularization: accounting for the desire to not over-fit by including a penalty term in the error function. For example:
+			$E_R(w) = E(w) + \frac{\lambda}{2}\sum_{i=0}^{n}{w_i^2}$, where $\lambda$ is a regularization parameter governing the importance of the model complexity penalty
+		
+		\item validation set, k-fold cross validation
+		\item leave one out cross validation: k-fold cross validation where k = n, the number of data points
+		\item K-nearest neighbours
+		\item uncertainty, frequentist, bayesian
+		\item maximum likelihood principle
+		\item bootstrap: use MLE to predict parameters for a model to fit multiple alternative data sets,
+		and measure the variance of the parameters over the distribution of data sets
+		For example, to bootstrap we may select a data sets from D by taking N data points with replacement
+		
+		\subsection{Regularisation}
+		The key idea here is to achieve the perfect balance between bias (over-fitting) and variance (under-fitting). There are many ways of achieving this. For instance:
+		
+		\begin{itemize}
+			\item setting \textbf{M}, the number of hidden units, can limit the complexity of the function which can be modelled.
+			\item \textbf{Weight Decay}: start with a large value of \textbf{M} and add a regularisation parameter to the error function.
+			\item \textbf{Early Stopping}: stop at the point of lowest error for the validation set, not the train set.
+		\end{itemize} 
+		
+	\end{itemize}
+	
+	
+	\clearpage
+	\section{Regression}
+	
+	\textit{Definition of regression:} to predict the continuous target value of one or more variables
+	
+	\subsection{Linear Regression}
+	
+	\begin{itemize}
+	\item Linear regression models only need to be linear with respect to the adjustable parameters.
+	\item They do not need to be linear with respect to the input variables.
+	\item Therefore, polynomial regression is also linear regression (e.g. $f(x) = \alpha x^2$) but multi-layer neural networks are not.
+	
+	\item For more advanced linear regression, we can take a linear combination of a number of non linear functions of the input variables.
+	
+	\item Example of a linear model:
+	$F(X, w_1, w_2) = w_1 * \sin{x} + w_2 * x^2$
+	
+	\item Example of a non linear model:
+	$F(X, w_1) = w_1^2 * x$
+	
+	\item The non-linear functions we use on the input variables are called basis functions
+	
+	\item Single layer neural networks which sum the weighted inputs are linear models!
+	
+	\end{itemize}
+	
+	\subsection{Error function}
+	Choice of \textit{error function} is linked to maximum likelihood principle. \\
+	
+	Let us do some analysis where the key assumption is that noise is gaussian:
+	
+	Let our training set be the set of ${(x_n, t_n)}$ pairs where x is an input
+	vector and t is the output value.
+	
+	We assume there is a true deterministic function giving rise to t:
+	$t = t(x, w) + \epsilon$, where $\epsilon$ is gaussian noise with zero mean and
+	variance $\sigma^2$
+	
+	\subsection{Gradient Descent}
+	
+	The gradient descent algorithm is described below, given a training set and basis functions $\phi$
+
+	\begin{enumerate}
+	
+	\item Initialize random weights $\pmb{w}$, set regularization parameter $\lambda$, stopping condition $\epsilon$, and training rate $\eta$
+	\item While the difference between weights from the previous step is less than $\epsilon$:
+	
+	\setlength{\itemindent}{2em}
+	\item Randomly shuffle the training data rows
+	\item For each training example input and output pair $(\pmb{x}_n, y_n)$:
+	
+	\setlength{\itemindent}{4em}
+	\item Calculate the gradient vector using \newline  
+	$\frac{d\pmb{e}_{L2}}{d\pmb{w}} = -(y_n - \pmb{w} * \phi(\pmb{x_n}))\phi(\pmb{x_n}) + \lambda\pmb{w}$
+	
+	\item Perform weight update: $\pmb{w} = \pmb{w} - \eta \frac{d\pmb{e}_{L2}}{d\pmb{w}}$
+	
+	\end{enumerate}
+	
+	\clearpage
+	\section{Classification}
+	
+	\subsection{Discriminative Models}
+	
+	\subsection{Probabilistic Generative Models}
+	
+	\subsection{Probabilistic Discriminative Models}
+	
+	\clearpage
+	\section{Latent Variable Models}
+	
+	\subsection{K-Means Clustering}
+	
+	\begin{itemize}
+		\item K-means is sensitive to the initial clusters - no guarantee it will converge to the same clusters each time
+		\item K means is a form of clustering, which is a form of unsupervised learning
+	\end{itemize}
+	
+	\begin{algorithm}
+		\caption{K-Means Clustering}\label{alg:euclid}
+		\begin{algorithmic}[1]
+			\Procedure{K-Means}{$\mathbf{X},K$}\Comment{$\mathbf{X}$ are points $\{x_n\}, n \in 1..N}, K clusters$
+			\State $C \gets initClusters(K)$ \Comment{C is a set of clusters $
+				\{c_i\}, i \in 1..K$}
+			
+			\While{$C'\not= C$}\Comment{While the clusters are not stable}
+			
+			\State $C \gets C'$
+			
+			\For{$x \in \mathbf{X}$}
+			
+			\State cluster(x) $\gets$ \textit{$argmin_{i \in 1..C}$}(dist($c_i, x$))  
+			
+			\EndFor
+			
+			\For{$c \in C'$}
+			
+			\State c $\gets$ average([x $\forall$ cluster(x)  == c])
+			\EndFor
+			
+			\EndWhile\label{euclidendwhile}
+			
+			\State \textbf{return} $C$\Comment{Return the clusters}
+			
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\subsection{Gaussian Mixture Models}
+	Here we consider more concretely how a hypothetical sample space \textbf{which could be well clustered} might arise:
+	
+	\subsection{The environment}
+	
+	(k, x) pairs are generated by performing the following steps:
+	
+	\begin{itemize}
+		\item sample k from ${1..K}$ with $\phi_k = P(K = k) => \sum_{k=1}^{K}\phi_k = 1$
+		\item each k corresponds to one of a collections of (possibly multi-variate) Gaussian distributions, with parameters $\mathbf{\mu_k}$ and $\mathbf{\sum_k}$
+		\item to select a data point, we sample from the distribution $\mathcal{N}(\mu_k, \sum_k)$
+		\item therefore we have a set of data points, however only the oracle knows the labels - referred to as \textbf{latent} variables. We only see the data points. It is our job to infer the possible labels through machine learning
+		\item Therefore, our job is to learn both the labels for each data point, and some model parameters to model the underlying distributions of those labels: $\mathbf{\theta := (\phi, \mu_1, \sum_1, ..., \mu_k, \sum_k)}$
+		\item note: this seems reminiscent of a hidden Markov model with continuous observed states.
+	\end{itemize}
+	
+	\subsection{Likelihood}
+	The probability of a given label and data point pair is: \\
+	$P(k, x_n) = P(K=k)P(x_n | K=k) = \phi_k \mathcal{N}(\mathbf{x_n | \mu_k, \sum_k})$ \\ \\
+	Since we do not know k, we sum (marginalise) over the unknown: \\
+	$P(\mathbf{x}_n) = \sum_{k=1}^{K}\phi_k \mathcal{N}(\mathbf{x_n| \mu_k, \sum_k})$ \\
+	
+	Log Likelihood of the entire model $\mathbf{\theta}$:
+	
+	$\mathcal{L}(\theta) = \sum_{n=1}^N\ln p(x_n)$
+	
+	
+	\subsection{Soft-EM}
+	Here we show the steps for soft EM (expectation Maximisation) 
+	
+	\begin{algorithm}
+		\caption{Soft EM}
+		\begin{algorithmic}[1]
+			\Procedure{SoftEM}{$\mathbf{X}, K$} \Comment{$\mathbf{X}$ = \{$x_1$, ..., $x_n$\} training points, K is the number of labels}
+			
+			\State x $\gets$ 1
+			
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\section{Hard EM for Document Clustering}
+	
+	\subsection{Notation}
+	
+	Here we describe the notation used (from Alexandria)
+	
+	\begin{itemize}	
+		\item There are $N$ documents $\{\mathbf{d}_1, ..., \mathbf{d}_N\}$, each having a cluster assignment vector (the latent variable) $\{\mathbf{z}_1, ..., \mathbf{z}_n\}$, which is a sparse matrix containing 1 for the entry corresponding to the cluster, and 0 for all others.
+		\item $P(k) = \phi_k$, the probability of a document being of cluster $k$. There are $K$ clusters
+		
+		\item set of words in a dictionary $w \in \mathcal{A}$
+		\item word proportion vectors for each cluster $\mathbf{\mu}_k$, where $\sum_{w \in \mathcal{A}} \mathcal{\mu}_{k,w} = 1$
+		\item counts of word $w$ in document $d$: $c(w, d)$
+		
+		
+		\item The mixing components ($\phi_k = \frac{N_k}{N}$) are the total documents with a cluster over the total documents
+		
+		\item The word proportion parameters in each vector: $$\mu_{k,w} = \frac {sum^N_{n=1}z_{n,k}c(w, d_n)} {\sum{w' \in \mathcal{A}} \sum^N_{n=1} z_{n,k}c(w', d_n)}$$,
+		Which is the sum of all words in a cluster over the sum of all words in all documents of the cluster.
+		
+		\item $\mathbf{\theta} := (\mathbf{\phi}, \mathbf{\mu_1}, ..., \mathbf{\mu_k})$
+		
+		\item $\gamma(z_{nk}) := p(z_{nk} = 1 | \mathbf{d}_n, \mathbf{\theta})$ is the probability that a document $n$ is of cluster $k$ \\
+		
+		$$
+		P(z_{n,k}) = \frac
+		{\phi_k \prod_{w \in \mathcal{A}} \mu^{c(w, d_n)}_{k,w}}
+		{\sum^K_{k=1}(\phi_k \prod_{w \in \mathcal{A}} \mu^{c(w, d_n)}_{k,w})} 
+		$$
+		
+	\end{itemize}
+	
+	\begin{algorithm}
+		\caption{Soft EM For Document Clustering}
+		\begin{algorithmic}[1]
+			\Procedure{SoftEmDoc}{$\mathcal{D} := {d_1, ..., d_n}, K$}\Comment{$\mathcal{D}$ contains $N$ documents, K is the number of clusters}
+			
+			\State $\mathbf{\theta}^{new} \gets initTheta()$ \Comment{$\mathbf{\theta} := \{\mathbf{\phi}, \mathbf{\mu_1}, ..., \mathbf{\mu_K}\}$}
+			
+			\Do
+			\State $\mathbf{\theta}^{old} \gets \mathbf{\theta}^{new}$
+			
+			\For{$n \in N$}
+			
+			\For{$k \in K$}
+			
+			\State $\gamma(z_{n,k}) = P(z_{n,k} = 1 | \mathbf{d}_n, \mathbf{\theta^{old}})$ \Comment{Expectation (E) Step}
+			
+			\State $$\mathbf{\phi^{new}} = \frac{\sum^{N}_{n=1}\gamma(z_{n,k})}{N}$$
+			
+			\State $$\mathbf{\mu_{k,w}} = 
+			\frac
+			{\sum^{N}_{n=1}\gamma(z_{n,k})c(w, d_n)} {\sum_{w' \in \mathcal{A}} \sum^{N}_{n=1} \gamma(z_{n,k})c(w' d_n)}$$ \Comment{Maximisation (M) Step}
+			
+			\EndFor
+			
+			\EndFor
+			
+			\doWhile{$diff(\mathbf{\theta_{old}}, \mathbf{\theta^{new}}) < \epsilon$}
+			
+			\State return {$\mathbf{\theta}^{new}$}
+			
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}
+		\caption{Hard EM For Document Clustering}
+		\begin{algorithmic}[1]
+			\Procedure{SoftEmDoc}{$\mathcal{D} := {d_1, ..., d_n}, K$}\Comment{$\mathcal{D}$ contains $N$ documents, K is the number of clusters}
+			
+			\State $\mathbf{\theta}^{new} \gets initTheta()$ \Comment{$\mathbf{\theta} := \{\mathbf{\phi}, \mathbf{\mu_1}, ..., \mathbf{\mu_K}\}$}
+			
+			\Do
+			\State $\mathbf{\theta}^{old} \gets \mathbf{\theta}^{new}$
+			
+			\For{$n \in N$}
+			
+			\For{$k \in K$}
+			
+			\State $\gamma(z_{n,k}) = P(z_{n,k} = 1 | \mathbf{d}_n, \mathbf{\theta^{old}})$ \Comment{Expectation (E) Step}
+			
+			\State $$\mathbf{\phi^{new}} = \frac{\sum^{N}_{n=1}\gamma(z_{n,k})}{N}$$
+			
+			\State $$\mathbf{\mu_{k,w}} = 
+			\frac
+			{\sum^{N}_{n=1}\gamma(z_{n,k})c(w, d_n)} {\sum_{w' \in \mathcal{A}} \sum^{N}_{n=1} \gamma(z_{n,k})c(w' d_n)}$$ \Comment{Maximisation (M) Step}
+			
+			\EndFor
+			
+			\EndFor
+			
+			\doWhile{$diff(\mathbf{\theta_{old}}, \mathbf{\theta^{new}}) < \epsilon$}
+			
+			\State return {$\mathbf{\theta}^{new}$}
+			
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\clearpage
+	\section{Neural Networks}
+	
+	\clearpage
+	\section{Big Data}
+	
+	\subsection{Overview}
+	
+	\textit{Big} data is useful for training models which can grow in complexity as the data size increases - for example, deep neural networks. Not all models will grow with the training size though - naive bayes is good on small training sets, but quickly reaches it's upper bound of performance as data is added. \\
+	
+	The challenge though is training these models. Parallelisation can occur when we have multiple CPUs or computers (network latency being an issue in the later case). \\
+	
+	Where algorithms contain sums over the data set, we can split up the computation as portions of the sum and compute each portion on a different machine. \\
+	
+	\subsection{Batch Gradient Descent}
+	
+	\textit{In English}: in batch gradient descent, the gradient update is the sum of all individual weight updates (generally the partial derivatives of the zeroed error function). We can calculate that by giving the current model to each computer, but only subsets of the data to each computer. Each computer calculates its own error, then the master node sums them up to get the total weight update. All the models can then we updated. 
+	
+	Question: how to do this with stochastic gradient descent? Apparently it's some asynchronous update.
+	
+	\begin{algorithm}
+		\caption{Map Reduce for Gradient Descent}
+			\begin{algorithmic}[5]
+				\Procedure{Distributed Gradient Descent}{$\mathcal{D} := {d_1, ..., d_m}$}  \Comment{$\mathcal{D}$ is divided into M subsection}
+				
+				\State $\mathbf{w} \gets init()$ \Comment{parameter vector}
+				
+				\While{stopping condition not met}
+					
+					\State doInParallel($temp_m \gets \delta \mathcal{E}_m(\mathbf{w})$)
+					
+					\State $\mathbf{w} \gets \mathbf{w} + \sum_{m=1}^M temp_m$
+				
+				\EndWhile
+				
+				\EndProcedure
+			\end{algorithmic}
+		\end{algorithm}
+		
+	
+	\subsection{Distributed K-Means}
+	
+	\textit{In English}: here we calculate clusters for each subset of the data (as the average of the previously assigned points to that cluster) as well as the number of points assigned for that subset, then using all those averages (k * m, given k clusters and m machines) we can take a weighted average to get what would have been the overall average. The key here is that any correctly weighted average of a bunch of averages is the same as the average of all points :)
+	
+	\begin{algorithm}
+		\caption{Map Reduce for Gradient Descent}
+		\begin{algorithmic}[6]
+			\Procedure{Distributed Gradient Descent}{$\mathcal{D} := {d_1, ..., d_m}$}  \Comment{$\mathcal{D}$ is divided into M subsection}
+			
+			\State $\mathbf{\mu_k} \gets initRandom(), \forall k$ \Comment{init mu}
+			
+			\While{stopping condition not met}
+			
+			\State $\mathbf{\mu_k'} \gets 0, \forall k$ \Comment{init mu}
+			\State $\mathbf{n_k} \gets 0, \forall k$ \Comment{init n}
+			
+			\Comment{Map}
+			5
+			\State $doInParallel_k$($\mathbf{\mu_{km}} \gets calcCluster(pts=D_m,cluster=k)$)
+			\State $doInParallel_k$($\mathbf{n_{km}} \gets pointsInCluster(pts=D_m,cluster=k)$)
+			
+			\Comment{Reduce}
+			
+			\State $$\mu_k \gets \frac{\sum_{m=1}^{M} \mu_{km}}{\sum_{m=1}^{M}n_{km}}$$
+			
+			\EndWhile
+			
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\subsection{Distributed Expectation Maximisation for Gaussian Mixture Models}
+	
+	Similar to the above examples, but a little more complicated.
+	
+	
+	
+	
+\end{document}
