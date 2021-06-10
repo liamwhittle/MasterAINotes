@@ -18,7 +18,51 @@
 	
 	\subsection{N-Gram Models}
 	
+	\begin{itemize}
 	
+		\item Language (prediction) models which make the \textit{Markov assumption} for an $(n-1)^{th}$ order Markov Model; i.e. that only the previous n-1 words have a probabilistic dependence on the current word.
+		
+		\item Probability of words 1 to n: $P(w_1^n) = \prod_{k=1}^{n}P(w_k | w_{k-N+1}^{k-1})$
+		
+		\item Pre-process the input to include n-1 $<s>$ symbols and a $</s>$ symbol at the start and end of each sentence respectively. 
+		
+		\item \textit{example:} 
+		
+		\begin{center}
+			Text: \\
+			One cat sat. Three \textbf{cats sat}. Eight \textbf{cats sat}. The \textbf{cats} had nine lives. 	\\
+			
+%			P(sat $|$ cats sat) = $\frac{C(cats,sat)}{C(cat)} = \frac{2}{3}$
+			
+		\end{center}
+		
+		\item Sentence Generation: until you produce a $</s>$ symbol, continually generate words using: $argmax_(w_k) \frac{C(w_{k-n+1},...,w_k)}{C(w_{k-n+1},...,w_{k-1})}$ 
+		
+		\item Perplexity: 
+		
+		\item Smoothing: 
+		
+			\begin{itemize}
+				\item Laplace (add-one): $P(W_n | w_{n - N + 1}^{n-1}) = \frac{C( w_{n - N + 1}^{n-1}w) + 1}{c( w_{n - N + 1}^{n-1}) + V}$
+				
+				\item 
+			
+			\end{itemize}
+		
+	General steps for creating an n-gram model:
+	
+	\begin{enumerate}
+		\item choose a vocabulary 
+		\item replace unknown words in the training corpus with <UNK> 
+		\item 
+		
+		
+	\end{enumerate} 
+		
+		
+	\end{itemize}
+	
+	\textbf{}
 	
 	
 	
