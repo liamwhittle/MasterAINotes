@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[]{article}
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -6,10 +6,11 @@
 \usepackage{algorithmicx}
 \usepackage[noend]{algpseudocode}
 \usepackage{mathtools}
+\usepackage{listings}
 
 \title{NLP - Master Notes}
 
-\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1} % for allowing us to do do while loops
 
 \begin{document}
 	\maketitle
@@ -96,12 +97,41 @@
 	
 	\item Back-off: back-off to lower n models until data is available (does this mean you can have arbitrary n?)
 	
-	
-		
 	\end{itemize}
 	
-	\textbf{}
+
+	\section{Part of Speech Tagging}
+
+	\section{Statistical Parsing}
 	
+	\subsection{Overview}
 	
+	\subsection{Parse Trees, CNF, CFG, PCFG}
+	
+	\textbf{Parse Trees}: show the groupings of words in a sentence to their syntactic group. E.g. Noun Phrase (NP), Verb Phrase (VP). This helps downstream NLP tasks to determine the meaning of sentences, perform translations, etc. \\
+	
+	\textbf{Converting to Chomsky Normal Form:}
+	Chomsky Normal Form means that the right hand side of each rule must expand to two non terminals, or one terminal. \cite{jurafsky2018speech}
+	
+	\begin{enumerate}
+		\item Copy all conforming rules to the new grammar unchanged
+		\item Convert terminals within rules to dummy non-terminals
+		\item Convert unit productions
+		\item Make all rules binary and add them to new grammar.
+	\end{enumerate}
+	
+
+	\textbf{PCFG}: each rule is assigned a probability, and the sum of all probabilities per non terminal (on the left hand side of the rule) = 1.
+
+	
+	\subsection{CKY Algorithm, Probabilistic CKY}
+	
+	CKY algorithm requires a grammar to be in Chomsky Normal Form. This will naturally result in an (likely unbalanced) binary tree when expanded. \\
+	
+	The \textbf{time complexity} of CKY parsing is $O(n^3)$, since there are $n^2$ cells to fill, and each cell requires querying n split points (\textit{not 100\% sure about this point}). 
+	
+	% bibliography
+	\bibliographystyle{ieeetran}
+	\bibliography{nlp_references}
 	
 \end{document}

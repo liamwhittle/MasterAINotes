@@ -114,13 +114,34 @@
 	\end{enumerate}
 	
 	\clearpage
-	\section{Classification}
+	\section{Classification} \cite{elements}
+	
+	In classification, you can either model a decision boundary itself (e.g. a set of hyper-planes) - this would be called a \textbf{discriminative model}, or a probabilistic generative model (e.g. a bayesian classifier) which models the probability that 
 	
 	\subsection{Discriminative Models}
+	\textit{Definition}: Non probabilistic models which directly assign any input to one class.
+	
+	\textbf{Perceptron} \\
+	The perceptron for \textit{two classes} is a generalised linear model with a step function deciding which class to apply to, i.e.:
+	
+	$\hat{y} = f(\mathbf{w} * \phi(x) + b)$, where f is 1 for values greater than 0, else -1. \\
+	Since it is a non differentiable function, we must use the ``perceptron update" function instead of back prop. 
 	
 	\subsection{Probabilistic Generative Models}
+	\textit{Definition}: Infer the class posterior from the class prior and the class conditional, which we derive from the data (e.g. Naive Bayes). \\
+	 
+	
+	\textbf{Benefits} of generative models: by modelling the underlying distributions, we can generate synthetic data (e.g. by plugging the generated parameters into a probability model and using RNG).
+	
+	\textbf{Detriments} of generative models: often they have more parameters than discriminative models. \\ 
+	
+	\textit{Mathematically}: $P(C_k | x) = P(C_k) * P(x | C_k)$ \\ 
+	
+	
 	
 	\subsection{Probabilistic Discriminative Models}
+	\textit{Definition}: Probabilistic model which assigns a probability per class input pair.
+	
 	
 	\clearpage
 	\section{Latent Variable Models}
@@ -379,6 +400,9 @@
 	Similar to the above examples, but a little more complicated.
 	
 	
+	% bibliography
+	\bibliographystyle{ieeetran}
+	\bibliography{ml_references}
 	
 	
 \end{document}
