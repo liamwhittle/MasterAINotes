@@ -165,6 +165,34 @@
 	
 	The \textbf{time complexity} of CKY parsing is $O(n^3)$, since there are $n^2$ cells to fill, and each cell requires querying n split points (\textit{not 100\% sure about this point}). 
 	
+	
+	\section{Statistical Machine Translation}
+	
+	\textbf{Linguistic issues with machine translation:} \textit{Lexical divergence (not all words in one language have a word in the other), syntactical divergence (e.g. SVO vs SOV), morphology} \\
+	
+	\textbf{Vauqouis Triangle}:
+	
+	\begin{itemize}
+		\item Words 
+		\item parsing -  syntactic structure
+		\item SRL \& WSD - Semantic Structure
+		\item Semantic Parsing -  Interlingua
+	\end{itemize}
+	
+	
+	\section{Semantic Parsing}
+	
+	\subsection{Semantic Role Labelling (SRL)}
+	
+	E.g. nominative and accusative. Some possible roles include: \textit{Agent, Patient, Instrument, Beneficiary, Source, Destination} (roles aren't limited to people, they can be assigned to places, things etc.)
+	
+	There \textit{can} be syntactic clues (e.g. preposition words - "with", "for", "from" etc.), however ultimately very difficult to do.
+	
+	\textbf{Selectional Restrictions}: by assigning a role to a concept, we imply certain characteristics of the concept. E.g.: a thing which is an "agent" should be animate (and not inanimate). Taxonomic abstraction hierarchies can be used to determine if such constraints are met (e.g. human = mammal = vertebrate = animate). 
+	
+	 
+	
+	
 	% bibliography
 	\bibliographystyle{ieeetran}
 	\bibliography{nlp_references}
