@@ -15,6 +15,10 @@
 \begin{document}
 	\maketitle
 	
+	\section{Introduction}
+	
+	\section{Automata and Regex}
+	
 	\section{Language Models}
 	
 	\subsection{N-Gram Models}
@@ -241,24 +245,47 @@
 		\item Semantic Parsing -  Interlingua
 	\end{itemize}
 	
+	\section{Neural Machine Translation}
 	
+	\clearpage 
 	\section{Semantic Parsing}
 	
-	\subsection{Semantic Role Labelling (SRL) - concepts}
+	\subsection{Meaning Representation}
+	Question: how to do question answering of natural language (\textbf{NL})? \\
+	Entailment for question answering: $$FOL \gets parse\_to\_FOL(NL) $$ \\
+              $$ answer \models FOL $$ \\
+              $$ answer \gets parse\_to\_english(answer) $$ \\
+              
+    \textit{Model Theoretic Semantics} - defines the meaning of formal logic byp providing the set theoretic extensions of symbols (e.g. an interpretation of their extension to the real word/ model).
+	
+	
+	\subsection{Semantic Role Labelling (SRL) Concepts}
 	
 	E.g. nominative and accusative. Some possible roles include: \textit{Agent, Patient, Instrument, Beneficiary, Source, Destination} (roles aren't limited to people, they can be assigned to places, things etc.)
 	
-	There \textit{can} be syntactic clues (e.g. preposition words - "with", "for", "from" etc.), however ultimately very difficult to do.
+	There \textit{can} be syntactic clues (e.g. preposition words - ``with", ``for", ``from" etc.), however ultimately very difficult to do.
 	
 	\textbf{Selectional Restrictions}: by assigning a role to a concept, we imply certain characteristics of the concept. E.g.: a thing which is an "agent" should be animate (and not inanimate). Taxonomic abstraction hierarchies can be used to determine if such constraints are met (e.g. human = mammal = vertebrate = animate). 
 	
 	\subsection{SRL Approaches}
 	
-	\textit{Idea:} first apply a syntactic parse tree, then label the concepts \\
+	1. \textit{Idea:} first apply a syntactic parse tree, then label the concepts \\
 	SRL $\subset$ \textit{Sequence Labelling} \\
-	Labels = Parse Tree Nodes \\
+	Inputs = Parse Tree Nodes \\
+	Classifier: labels the parse tree nodes with roles \\
 	
-	Can use a variety of supervised machine learning methods.
+	\textit{Features for classifier: }
+	\begin{itemize}
+	 \item Paths from the candidate node to be labelled to the predicate along the parse tree.
+     \item position: does the candidate preceed or follow the predicate?
+     \item voice: active or passive?
+	\end{itemize}
+    
+    Issues: relies on the correctness of syntactic parsing, which often has errors. Parse Tree (errors) --- Classifier based SRL (more issues) \\ 
+    
+	Semantic roles can be indicated by syntactic features/ locations of words in sentence, but this is not generally useful as there are many exceptions. \\
+	
+	\textit{Selectional Restrictions:} Some roles place restrictions on other roles: e.g. the patient of 'eat' should be a type of food.
 	
 	\subsection{Predicate Calculus / Functional Query Language}
 	
@@ -278,6 +305,17 @@
 	\textbf{FOL:} answer($x_1$, smallest($x_2$,(state($x_1$), area($x_1$,$x_2$)))) \\
 	\textbf{FQL:} answer(smallest\_one(area\_1(state(all)))) \\
 	
+	\subsection{Composing Meaning Representations from Parse Trees}
+	\textit{Need to review this material - second half of lecture 8}
+	
+	\clearpage
+	\section{Lexical Semantics}
+	
+	\clearpage
+	\section{Vector Space Semantics}
+    
+    \clearpage
+	\section{Discourse}
 	
 	% bibliography
 	\bibliographystyle{ieeetran}
