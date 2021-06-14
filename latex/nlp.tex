@@ -231,7 +231,7 @@
 	
 	The \textbf{time complexity} of CKY parsing is $O(n^3)$, since there are $n^2$ cells to fill, and each cell requires querying n split points (\textit{not 100\% sure about this point}). 
 	
-	
+    \clearpage
 	\section{Statistical Machine Translation}
 	
 	\textbf{Linguistic issues with machine translation:} \textit{Lexical divergence (not all words in one language have a word in the other), syntactical divergence (e.g. SVO vs SOV), morphology} \\
@@ -245,6 +245,7 @@
 		\item Semantic Parsing -  Interlingua
 	\end{itemize}
 	
+	\clearpage
 	\section{Neural Machine Translation}
 	
 	\clearpage 
@@ -311,12 +312,102 @@
 	\clearpage
 	\section{Lexical Semantics}
 	
+	\subsection{Word Sense Dissambiguation}
+	
+	\textit{Word Sense Disambiguation:} which meaning is the word referring to? \\
+	
+	\textit{WordNet} is a lexical database linking words to nodes (meanings) with various relationships, e.g.: antonyms, attributes, similarness, causes, entailment, hyponym (plant is a hyponym of tree as it is a more specific instance). \\
+	
+	\textbf{How to achieve word sense dissambiguation:} 
+	
+	\begin{enumerate}
+	 \item Conduct POS tagging
+	 \item Get list of possible senses of (word, POS) from WordNet
+	 \item Encode the context of the word
+	 \item Train a classifier on this data (input = word, POS, contect, output = word sense).
+	 \item does this mean we need seperate classifiers per word?
+	\end{enumerate}
+    
+    \textbf{Feature Encoding For Word Context:} \\
+	
+	\begin{itemize}
+	 \item unordered surrounding bag of word (in sparse vector form) - gives general topic
+	 \item POS of neighbouring words
+	 \item ``Local Collocations'' - immediate neighbours of a word ot give context
+	\end{itemize}
+
+	\subsection{The Yarowsky Algorithm}
+	Semi-supervised method which first trains on the supervised data, then repeatedly expands the set of ``supervised'' training data by labelling unsupervised data for which the classifier is extremely confident. Then, the classifier re-trains with the larger supervised set until it is complete. At each iteration, increase the number of features (``seed words'').
+	
+	\subsection{Coreference Resolution}
+	The task of dissambiguating which pronouns refer to the same entity. E.g. \textbf{I} took \textbf{my} cat to the vet. Here, I and my refer to the same thing.
+	
+	Steps: 1. detect the mentions of things (look for pronouns). 2. Cluster the mentions (challenging!). \\
+	
+	Difficult recognition cases: ``\textbf{It} is sunny''. Here, ``it'' is a reference we should care about, but it's not a pro-noun, propper noun etc. Should we filter out singleton mentions to make clulstering easier? \\
+	
+	Could also do reference detection and coreference resolution end to end.
+	
+	\subsection{Hobb's naive algorithm}
+	
 	\clearpage
 	\section{Vector Space Semantics}
     
+    \subsection{Word Weighting}
+    
+    \begin{itemize}
+     \item Weights: term which appear more frequently  are more important. should normalize term frequency by dividing by the most common term in the document.
+     \item Inverse document frequency: $idf_i = log_2(\frac{N}{df_i})$, where N is the number of documents, $df_i$ is the number of documents containing term i. Log is for smoothing. Higher values for more unusual terms. $idf_i \in [0, \infty]$. E.g. when a word i is in literally every document, $idf_i$ = 0. If a term is in every 16 documents, $idf_i = 4$
+     \item Typical tf-idf weighting: $w_{ij} = tf_{ij}idf_j$ for word i in document j.
+     \item Cosine Similarity: $$cossim(\hat{a}, \hat{b}) = \frac{\hat{a} \cdot \hat{b}}{|\hat{a}| \cdot |\hat{b}|}$$
+     
+     $$cossim(\hat{a}, \hat{b}) 
+     = \frac
+     {\sum_i^{len(\hat{a})} \hat{a_i} * \hat{b_i}}
+     {\sqrt{\sum_i^{len(\hat{a})}\hat{a_i} * \sum_i^{len(b)}\hat{b_i}}}$$
+     
+    \end{itemize}
+
+    
+    
+      \textbf{Distributed Representations}: Bag of words approach above makes extremely large sparse matrices. Need a more compact way of representing...
+     
+     PCA or SVD can achieve this. Basically: which dimensions capture the most variance/ information within the data? \\
+     
+     \subsection{Word-2-Vec:}
+     
+     The simplest and most naive way to represent words from a dictionary as a vector would be with one-hot encoding (sparce binary matrices with dictionary size). This is a poor use of memory for single words or ordered words, but reasonable if we want to represent dense un-ordered sets of words. What it doesn't do however is capture any useful information about the words and how they are related. Isn't \textbf{orange} similar to \textbf{apple} more than it is similar to \textbf{exuberantly}? \\
+     
+     It turns out by using a variation of a \textit{neural autoencoder} to predict \textit{context words} we can create vector representations of words which are both \textbf{more compact } (smaller dimension) and \textbf{geometrically useful}. By the later point, I mean to say \textbf{apple} and \textbf{orange} will have a smaller (some metric) distance than apple and \textbf{exuberantly}.
+     
+     The two variations of this auto-encoder, \textit{Skip-Gram} and \textit{CBOW}, both produce the same thing, but use different approaches to training.
+     
+     The assumption which both of these methods use is that similarity of words can be learned by taking immediate context words as relevant information. This does mean we loose the ability to consider long term dependencies, however word-2-vec is more of a corpus wide average than a question answering system, so it should be a fair assumption to make. \\
+     
+     \textbf{SkipGram}
+     \begin{itemize}
+      \item Input: word to be embedded
+      \item Output: surrounding context words
+      \item Good for: Higher dimensions, large corpus
+     \end{itemize}
+
+     
+     \textbf{CBOW}
+     \begin{itemize}
+      \item Input: surrounding context words
+      \item Output: word to be embedded
+      \item Good for: smaller corpus, faster training
+     \end{itemize}
+    
+    \subsection{Keyword Extraction}
+    
+   
     \clearpage
 	\section{Discourse}
 	
+	
+	
+	\clearpage
 	% bibliography
 	\bibliographystyle{ieeetran}
 	\bibliography{nlp_references}
