@@ -91,7 +91,7 @@
 		\item Smoothing: 
 		
 			\begin{itemize}
-				\item Laplace (add-one): $P(W_n | w_{n - N + 1}^{n-1}) = \frac{C( w_{n - N + 1}^{n-1}w) + 1}{c( w_{n - N + 1}^{n-1}) + V}$, where V is the vocabulary size
+				\item Laplace (add-one): $P(W_n | w_{n - N + 1}^{n-1}) = \frac{C( w_{n - N + 1}^{n-1}w) + 1}{c( w_{n - N + 1}^{n-1}) + V + 1}$, where V is the vocabulary size
 				
 				\item add $\delta$, normalise by $\delta V$
 			
@@ -234,7 +234,15 @@
     \clearpage
 	\section{Statistical Machine Translation}
 	
-	\textbf{Linguistic issues with machine translation:} \textit{Lexical divergence (not all words in one language have a word in the other), syntactical divergence (e.g. SVO vs SOV), morphology} \\
+	\textbf{Linguistic issues with machine translation:}
+	
+	\begin{itemize}
+	 \item \textbf{Lexical divergence} - not all words in one language have a word in the other
+	 \item \textbf{Syntactical divergence} (e.g. SVO vs SOV)
+	 \item \textbf{Morphology} - languages with polysynthetic structures make it harder to represent the language as sets of words, because a single word can represent an entire sentence.   
+	\end{itemize}
+	
+	
 	
 	\textbf{Vauqouis Triangle}:
 	
@@ -247,6 +255,23 @@
 	
 	\clearpage
 	\section{Neural Machine Translation}
+	
+	The key difference between Neural and Statistical Machine Translation (NMT, SMT) is that SMT treats the problem of translation as a word to word alignment problem, where the alignment is a latent variable. NMT treats the entire source to target sentence as a more complicated function. \\
+	
+	\textbf{Key areas:}
+	\begin{itemize}
+	 \item Perceptrons are good for learning at the character level, good for linearly seperable data, however cannot solve certain problems (e.g. XOR)
+	 \item Feed forward neural networks can be used for learning characters using CNNs (e.g. MNIST)
+	 \item Sequence to Sequence (seq-2-seq) models are conditional language models
+	 \item LSTMs and GRUs are recurrent units which can perform sequence to sequence translation with memory. Hidden state of LSTM, for instance, can show embedded context of phrases.
+	 \item Attention: these models learn which components of each sequence are relevant to each other. Higher layers learn semantics, lower layers are better and morphology etc.
+	 \item ELMO: creating context specific embeddings for weighted task specific embeddings to be fed into the system. 
+	 \item Transformers: Attention is All You Need: similar to CNN but no recursion. Embeddings are positional. 
+	 \item BERT: deep bidirectional transformer
+	 \item ELMO and BERT can also be used for word sense dissambiguation, coreference resolution.
+	 \item BERT: good for some things, but cannot reason about it's knowledge (it cannot draw logical inferences from sentences). Struggles representing numbers, Representations are hierarchical rather than linear.
+	\end{itemize}
+
 	
 	\clearpage 
 	\section{Semantic Parsing}
@@ -346,7 +371,9 @@
 	
 	Difficult recognition cases: ``\textbf{It} is sunny''. Here, ``it'' is a reference we should care about, but it's not a pro-noun, propper noun etc. Should we filter out singleton mentions to make clulstering easier? \\
 	
-	Could also do reference detection and coreference resolution end to end.
+	Could also do reference detection and coreference resolution end to end.\\
+
+	\textbf{Anaphora}: specifically when pronouns refer to previously refered concepts
 	
 	\subsection{Hobb's naive algorithm}
 	
@@ -404,7 +431,25 @@
    
     \clearpage
 	\section{Discourse}
+	Linguistic Devices: Cue phrases, paragraphs, content flow. \\
+	Discourse relations: ways in which sentences relate to each other. \\
+	Types: 
+	\begin{itemize}
+	 \item Explanation: Provides explanation for previous sentence. (what was the cause from the effect)
+	 \item Elaboration: Adding more information to a previous sentence. 
+	 \item Result: A thing happened as a result of the previous sentence (what is the effect of the cause).
+	 \item Parallel: Extra information  
+	 \item Occasion: What was the situational motivation for doing something?
+	\end{itemize}
 	
+	We can construct a binary tree using nodes as these discourse types, and leafes as sentences and other nodes. We could also constructa a graph, a flat structure etc. Multiple theories of discourse. \\
+	
+	\textbf{Rhetorical Structure Theory (RST)} \\
+	Considers nucleus's and satellites. The nucleus is more important.
+	Elementary Discourse Units (EDU) form satelites. Nucleus can be a group of related satelites / nucleus's. \\ 
+	
+	\textbf{PDTB} - flat structure, WSJ, larger database
+
 	
 	
 	\clearpage
