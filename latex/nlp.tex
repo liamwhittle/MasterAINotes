@@ -19,12 +19,50 @@
     
     Mostly non examinable material (history of NLP, overview)
     
-	\section{Automata and Regex}
+	\section{Automata, Regex, Morphology}
 	
-	FSA, NFA and regex can all be used to define sets of correct sentences
+	\subsection{DFA, NFA, Regex}
+	DFA, NFA and regex can all be used to define sets of correct sentences. \\
 	
-	Regex rules: 
+	DFA and NFA both require the following: 
 	
+	$M = (Q, \: \sum, \: \mathit{f}, \: q_0, \: F)$ \\
+	That is, a set of states Q (nodes), a set of symbols (arcs) $\sum$, a set of transitions f which are labelled with symbols and denote travel from state to state, a starting state and a set of ending states. \\
+	
+    \subsection{Morphology}
+	
+	The study of structure of words. For example, morphology in English often comes down to the use of prefixes and suffixes to modify the meaning of words. \\
+	
+	A \textbf{morpheme} is the minimal unit of a word which carries some meaning - e.g. cats contains two morphemes - cat and s.
+	
+	\begin{itemize}
+	 \item Stem: main morpheme (e.g. rail)
+	 \item Affixes: additional meaning modifiers:
+        \begin{enumerate}
+         \item Prefix (e.g. de in derail)
+         \item Suffix (e.g. ed in derailed)
+         \item Circumfix (both)
+         \item infix (in the middle of words)
+        \end{enumerate}
+	\end{itemize}
+
+	\textbf{Free} morphemes can stand on their own as words (e.g. cat) \\
+	\textbf{Bound} morphemes are components must be added to free morphemes \\ \\
+	
+	Of the \textbf{bound morphemes}, \textbf{derivational} morphemes change the underlying meaning of the word (e.g. negates the meaning - anti-thesis) or convert it to a different form (e.g. verb from noun), \textbf{inflectional} morphemes add gramatical information (e.g. s in cats means there are multiple cats). \\ \\
+	
+	\textbf{Morphological parsing} is useful for information retrieval (e.g. normalising verb tenses), machine translation, and for other downstream NLP tasks. \\
+	
+	A \textbf{lexicon} is a list of all stems and affixes. \\ 
+	
+	\textbf{Stemming} means using rules to remove word endings to achieve resulting stems, \textbf{lemmatization} is mapping the word to its lemma using a lexicon. \\
+	
+	
+	
+	
+	
+	
+	\clearpage
 	\section{Language Models}
 	
 	\subsection{N-Gram Models}
