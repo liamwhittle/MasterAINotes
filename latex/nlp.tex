@@ -16,8 +16,14 @@
 	\maketitle
 	
 	\section{Introduction}
-	
+    
+    Mostly non examinable material (history of NLP, overview)
+    
 	\section{Automata and Regex}
+	
+	FSA, NFA and regex can all be used to define sets of correct sentences
+	
+	Regex rules: 
 	
 	\section{Language Models}
 	
@@ -346,7 +352,7 @@
 	\textbf{How to achieve word sense dissambiguation:} 
 	
 	\begin{enumerate}
-	 \item Conduct POS tagging
+% 	 \item Conduct POS tagging
 	 \item Get list of possible senses of (word, POS) from WordNet
 	 \item Encode the context of the word
 	 \item Train a classifier on this data (input = word, POS, contect, output = word sense).
@@ -382,8 +388,10 @@
     
     \subsection{Word Weighting}
     
+    The first idea is that we have a corpus of documents, and we want to represent the documents in single vectors. Then we can compare documents as comparing two vectors. To start with, the dimension of the vector will be the size of the pre-processed vocabulary derived from the corpus. Then, we can sum the one-hot encoding of each weighted word. Weighting is defined below:
+    
     \begin{itemize}
-     \item Weights: term which appear more frequently  are more important. should normalize term frequency by dividing by the most common term in the document.
+     \item Weights: term which appear more frequently  are more important. should normalize term frequency by dividing by the most common term in the document. $tf_{ij} = \frac{count(word_i \: in \: doc_j)}{max_i(word_i \: in \: doc_j)}$. 
      \item Inverse document frequency: $idf_i = log_2(\frac{N}{df_i})$, where N is the number of documents, $df_i$ is the number of documents containing term i. Log is for smoothing. Higher values for more unusual terms. $idf_i \in [0, \infty]$. E.g. when a word i is in literally every document, $idf_i$ = 0. If a term is in every 16 documents, $idf_i = 4$
      \item Typical tf-idf weighting: $w_{ij} = tf_{ij}idf_j$ for word i in document j.
      \item Cosine Similarity: $$cossim(\hat{a}, \hat{b}) = \frac{\hat{a} \cdot \hat{b}}{|\hat{a}| \cdot |\hat{b}|}$$
@@ -394,8 +402,6 @@
      {\sqrt{\sum_i^{len(\hat{a})}\hat{a_i} * \sum_i^{len(b)}\hat{b_i}}}$$
      
     \end{itemize}
-
-    
     
       \textbf{Distributed Representations}: Bag of words approach above makes extremely large sparse matrices. Need a more compact way of representing...
      
@@ -403,7 +409,9 @@
      
      \subsection{Word-2-Vec:}
      
-     The simplest and most naive way to represent words from a dictionary as a vector would be with one-hot encoding (sparce binary matrices with dictionary size). This is a poor use of memory for single words or ordered words, but reasonable if we want to represent dense un-ordered sets of words. What it doesn't do however is capture any useful information about the words and how they are related. Isn't \textbf{orange} similar to \textbf{apple} more than it is similar to \textbf{exuberantly}? \\
+     The naive way above of representing words from a dictionary as a vector with one-hot encoding (sparce binary matrices with dictionary size) is a poor use of memory for single words or ordered words, but reasonable if we want to represent dense un-ordered sets of words.
+     
+     What it doesn't do however is capture any useful information about the individual words and how they are related. Isn't \textbf{orange} similar to \textbf{apple} more than it is similar to \textbf{exuberantly}? \\
      
      It turns out by using a variation of a \textit{neural autoencoder} to predict \textit{context words} we can create vector representations of words which are both \textbf{more compact } (smaller dimension) and \textbf{geometrically useful}. By the later point, I mean to say \textbf{apple} and \textbf{orange} will have a smaller (some metric) distance than apple and \textbf{exuberantly}.
      
@@ -427,8 +435,29 @@
      \end{itemize}
     
     \subsection{Keyword Extraction}
+This section biefly covers the analysis of web pages by keywords - a task Google pioneered. \\
     
+    \textit{Pages are important if they are linked to by other important pages.} \\
+    
+    Page Rank Value for a page u, given all the linked pages $B_u$ and the number of links from page v (i.e. the number of things v points to). 
+    $$PR(\mathit{u}) = \sum_{v \in B_u} \frac{PR(v)}{L(v)}$$
    
+    This algorithm converges after unsupervised iterations from random initial values.
+   
+    Adding a damping factor: 
+    
+    $$PR(\mathit{u}) = \frac{1-d}{N} + d \sum_{v \in B_u} \frac{PR(v)}{L(v)}$$
+    
+    Text rank applies a similar idea to text processing. We construct a graph where the nodes are words and the links are relationships between words within the corpus.
+    
+    RAKE (rapid automatic keyword extraction) algorithm creates this graph so that we can train the model:
+    
+    \begin{itemize}
+     \item break up corpus into sentences (candidate keywords)
+     \item build a word co-occurence graph
+     \item calculate scores for words based on frequency of the vertices in the graph (like with page rank)
+    \end{itemize}
+    
     \clearpage
 	\section{Discourse}
 	Linguistic Devices: Cue phrases, paragraphs, content flow. \\
