@@ -91,11 +91,33 @@
 	We assume there is a true deterministic function giving rise to t:
 	$t = t(x, w) + \epsilon$, where $\epsilon$ is gaussian noise with zero mean and
 	variance $\sigma^2$
-	
+    
+    So we can write \\
+    
+    $$p(t|\mu, w, \sigma^2) = N(t|y(x, w), \sigma^2)$$    
+    
+    $$p(t_1,...,t_N|x_1,...x_N) = \prod_{n=1}^N N(t_n | y(x_n, w), \sigma^2)$$ \\
+    
+    Now we can define the log likelyhood as:
+    
+    $$L(\theta) = log \prod_{n=1}^N N(t_n | y(x_n, w), \sigma^2)$$
+    
+    $$ = \sum_{n=1}^N 
+    log \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}\frac{(x - \mu)}{\sigma}^2}$$
+       
+       
+    $$ =  N \log \frac{1}{\sqrt{2\pi}} + \sum_{n=1}^N \log e^{-\frac{1}{2}\frac{(x - \mu)}{\sigma}^2}$$
+    
+    $$ =  N \log \frac{1}{\sqrt{2\pi}} + \sum_{n=1}^N {-\frac{1}{2}\frac{(x - \mu)}{\sigma}^2}$$
+    
 	\subsection{Gradient Descent}
 	
-	The gradient descent algorithm is described below, given a training set and basis functions $\phi$
-
+	The gradient descent algorithm is described below, given a training set and basis functions $\phi$ \\
+	
+	First we need to define the cost function, $J(\theta)$:
+	
+	$$J(\theta) = \frac{1}{N} \sum_{n=1}^N \frac{1}{2} {||h_{\theta}(x^n) - y^n||}^2 + \frac{\lambda}{2}\sum_{l=1}^{n_l-1}\sum_{l=1}^{s_l}\sum_{j=1}^{s_l+1}{W_{ji}^{s_l+1}}^2$$
+    
 	\begin{enumerate}
 	
 	\item Initialize random weights $\pmb{w}$, set regularization parameter $\lambda$, stopping condition $\epsilon$, and training rate $\eta$
@@ -110,7 +132,8 @@
 	$\frac{d\pmb{e}_{L2}}{d\pmb{w}} = -(y_n - \pmb{w} * \phi(\pmb{x_n}))\phi(\pmb{x_n}) + \lambda\pmb{w}$
 	
 	\item Perform weight update: $\pmb{w} = \pmb{w} - \eta \frac{d\pmb{e}_{L2}}{d\pmb{w}}$
-	
+    
+   
 	\end{enumerate}
 	
 	\clearpage
@@ -209,20 +232,6 @@
 	
 	$\mathcal{L}(\theta) = \sum_{n=1}^N\ln p(x_n)$
 	
-	
-	\subsection{Soft-EM}
-	Here we show the steps for soft EM (expectation Maximisation) 
-	
-	\begin{algorithm}
-		\caption{Soft EM}
-		\begin{algorithmic}[1]
-			\Procedure{SoftEM}{$\mathbf{X}, K$} \Comment{$\mathbf{X}$ = \{$x_1$, ..., $x_n$\} training points, K is the number of labels}
-			
-			\State x $\gets$ 1
-			
-			\EndProcedure
-		\end{algorithmic}
-	\end{algorithm}
 	
 	\section{Hard EM for Document Clustering}
 	
@@ -326,7 +335,133 @@
 	
 	\clearpage
 	\section{Neural Networks}
+    
+    \subsection{Formulas to remember}
+    
+    \begin{itemize}
+     \item Sigmoid function: $$ \sigma(z) = \frac{1}{1 + e^{-z}}$$ 
+     
+     $$\dfrac{\mathrm{d}\sigma}{\mathrm{d}z} = \sigma(z)(1-(\sigma(z)))$$
+    
+     \item Tanh function: $$ tanh(z) = \frac{e^z-e^{-z}}{e^{z}+e^{-z}} $$
+     $$\dfrac{\mathrm{d}tanh(z)}{\mathrm{d}z} = 1-(tanh(z))^2$$
+     
+     Normal Distribution Formula:
+     $$\frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{x - \mu}{\sigma})^2}$$
+     
+     \item Neuron: $$ H_{W,b} := f(W^Tx) = f(\sum_i W_ix_i + b)$$
+    \end{itemize}
+    
+    \textbf{Textbook Terminology}
+    
+    \begin{itemize}
+        \item nl = number of layers
+        \item layer L =  $L_l$ where $L_1$ is the input layer and layer $L_{nl}$ is the output layer
+        \item $a_i^l = $ activation after f for neuron i at layer l. $a_i^1 = x_i$ and $a_i^{nl}$  is the final output to be compared to the training data.
+        \item $z_i^l = $ weighted sum of inputs to neuron i at layer l.
+        \item $W_{ij}^l$ = Weight leading from neuron j in layer l to neuron i in layer l + 1.
+        \item $b_i^l$ = Bias term leading towards neuron i in layer l + 1.
+    \end{itemize}
+    
+    \subsection{Activation and Error Functions}
+    
+    They key for all of the below examples is to understand what probability distribution the target function is modelled under, and therefore how maximising the joint probability could lead to a maximum likelyhood error function.
+    
+    \paragraph{Regression \\ \\ }
+    
+    \textbf{Activation Function}: In a regression problem, assuming we aren't making some claim about the range of our true output values, we will need the final output to be able to model any real valued number (or set therefore, but we focus on the single output case here).
+    Therefore, while the hidden layers may have non-linear activation functions, the final layer must be linear (e.g. just the sum of previous layers. \\ 
+    
+    \textbf{Distribution}: \\
+    
+    Assume a Gaussian model: $$P(y | x) = \prod_{n \in 1..N} \mathcal{N}(x_nW, \sigma)$$
+    
+    After taking the negative log likelyhood and doing some math, we get the sum of squared errors: \\
+    
+    \textbf{Error Function}: \\
+    $$ J(\theta) = \frac{1}{2} \sum_{n \in N} (X_nW + b - y)^2$$
+    
+    
+    \paragraph{Single Class Classification\\ \\ }
+    
+    \textbf{Activation Function}
+    
+    We assume need to output a probability of being in the singleton class, so the \textbf{sigmoid} function will work. \\
+    
+    \textbf{Distribution}: \\
+    We must assume a binomial distribution, with probability $\prod_{n \in N} h_n^{y_n} (1 - h_n^{y_n})^{1-y_n}$ \\
+    
+    \textbf{Error Function} \\
+    When we take the negative log of this, we end up getting \textbf{Cross Entropy Loss}: 
+    
+    $$J(\sigma) = -\sum_{n \in N} y^n log(h_n) - (1-y_n)log(1-h_n)$$
+    
+   
+    \paragraph{Multi Class Classification\\ \\ }
+    
+    \textbf{Activation Function}
+    
+    We will use \textbf{softmax} activation function: softmax transforms any real valued vector into a probability 
+    distribution with the following formula: \\
+    
+    For each element i of vector v: $$softmax(v_i) = \frac{e^{v_i}}{\sum_{v_n \in v}e^{v_n}}$$
+    
+    \textbf{Distribution}: \\
+    We also binomial distribution, with probability $\prod_{n \in N} \prod_{k \in Classes}  h_n^{y_{nk}} (1 - h_n^{y_{nk}})^{1-y_{nk}}$ \\
+    
+    \textbf{Error Function} \\
+    When we take the negative log of this, we end up getting \textbf{Cross Entropy Loss}: 
+    
+    $$J(\sigma) = -\sum_{n \in N} \sum_{k \in Classes} y^{nk} log(h_{n}) - (1-y_{nk})log(1-h_n)$$
+   
+    \subsection{Back Propogation}
+   
+    Now comes the final piece of the puzzle
+    The question is, how do we calculate the partial derivatives for the weights? Back propogation is able to give us $\dfrac{d}{d W_{ij}^{l}}J(\theta, x, y)$ for every possible weight by re-using the activations calculated in the forward pass. \\ 
+    
+    First we recall the gradient descent algorithm:
+    
+    \begin{enumerate}
 	
+	\item Initialize random weights $\pmb{w}$, set regularization parameter $\lambda$, stopping condition $\epsilon$, and training rate $\eta$
+	\item While the difference between weights from the previous step is less than $\epsilon$:
+	
+	\setlength{\itemindent}{2em}
+	\item Randomly shuffle the training data rows
+	\item For each training example input and output pair $(\pmb{x}_n, y_n)$:
+	
+	\setlength{\itemindent}{4em}
+	\item Calculate the gradient vector 
+	$\frac{d}{d\pmb{w}}J(\theta)$ for each weight \newline 
+	
+	\item Perform weight update: $\pmb{w} = \pmb{w} - \eta \frac{d\pmb{e}_{L2}}{d\pmb{w}}$
+   
+	\end{enumerate}
+        
+    Now comes the calculation of those above gradients with back-propogation: 
+    
+    \begin{enumerate}
+     \item Perform a feedforward pass, computing actuvations for layers $L2,...,L_nl$
+     \item For each output unit i in layer nl, set $\delta^{nl} = -(y_i - a_i^{nl})f'(z_i^{nl})$ 
+     \item for all the subsequent layers, and for each node i in layer l: set $\delta_i^l = (\sum_{j=1}^{s_l+1}W_{ji}^{l}\delta_j^{l+1})f'(z_i^l)$
+     \item $\frac{d}{dW_{ij}^l}J(\theta, x, y) = a_j^l\delta_i^{l+1}$
+    \end{enumerate}
+
+    \subsection{Regularisation}
+    There are a few different techniques for avoiding over fitting. Here they are:
+    
+    Weight Decay: adding a component to the error term to account for the magnitude of weights. \\
+    
+    Early Stopping: Stop with respect the smallest error of the validation set. \\
+    
+    Both of these techniques (in the case of a quadratic regularisation term) have a similar effect in limiting the effective complexity of the model.
+    
+    \subsection{Autoencoders}
+    
+    Mapping inputs onto themselves. Autoencoders are effectively performing principal component analysis. In the case of linear activation functions, the error function has a unique global minimum.  
+    
+    Having a non linear activation function in the single middle hidden layer will not cause the autoencoder to perform non linear principal component analysis - instead, you need extra hidden layers surrounding the middle layer with non linear activations.
+    
 	\clearpage
 	\section{Big Data}
 	

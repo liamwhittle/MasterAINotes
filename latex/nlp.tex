@@ -25,9 +25,11 @@
 	DFA, NFA and regex can all be used to define sets of correct sentences. \\
 	
 	DFA and NFA both require the following: 
-	
+    
 	$M = (Q, \: \sum, \: \mathit{f}, \: q_0, \: F)$ \\
 	That is, a set of states Q (nodes), a set of symbols (arcs) $\sum$, a set of transitions f which are labelled with symbols and denote travel from state to state, a starting state and a set of ending states. \\
+	
+	Comparison: DFA is fast and simple, but can have exponential space than some NFA based representations.
 	
     \subsection{Morphology}
 	
@@ -36,7 +38,8 @@
 	A \textbf{morpheme} is the minimal unit of a word which carries some meaning - e.g. cats contains two morphemes - cat and s.
 	
 	\begin{itemize}
-	 \item Stem: main morpheme (e.g. rail)
+	 \item Stem: main morpheme (e.g. rai
+	 l)
 	 \item Affixes: additional meaning modifiers:
         \begin{enumerate}
          \item Prefix (e.g. de in derail)
@@ -56,10 +59,6 @@
 	A \textbf{lexicon} is a list of all stems and affixes. \\ 
 	
 	\textbf{Stemming} means using rules to remove word endings to achieve resulting stems, \textbf{lemmatization} is mapping the word to its lemma using a lexicon. \\
-	
-	
-	
-	
 	
 	
 	\clearpage
@@ -152,13 +151,23 @@
 	\clearpage
 	\section{Part of Speech Tagging}
 	
-	A Part of speech tagger assigns for every word $w_i$ in a sentence $\{w_i, ..., w_n\}$ a part of speech (POS) tag $y_i$. POS tags include parts of speech like verb (tag=V), noun, adverb etc.
+	A Part of speech tagger assigns for every word $w_i$ in a sentence $\{w_i, ..., w_n\}$ a part of speech (POS) tag $y_i$. POS tags include parts of speech like verb (tag=V), noun, adverb etc. \\
 	
-	\textbf{Naive Baseline}: More than half of words are ambiguous - i.e. they have more than one possible tag. If we count all the tags in a training set and produce $P(tag | word)$ for each word, we can simply choose the most likely tag for the word. This baseline has an accuracy of about 92\%, only 5\% less than the state of the art. 
+	\textbf{Useful for}: word sense dissambiguation, syntactic parsing, and other downstream NLP tasks. \\
+	
+	\textbf{Naive Baseline}: More than half of words are ambiguous - i.e. they have more than one possible tag. If we count all the tags in a training set and produce $P(tag | word)$ for each word, we can simply choose the most likely tag for the word. This baseline has an accuracy of about 92\%, only 5\% less than the state of the art. \\
 	
 	All extra efforts in more complex models (e.g. CRF, HMM) are about squeezing out this last 5\%. 
 	
 	Named entity tagging (e.g. Washington State) is harder - it assumes groups of words together refer to one particular proper noun. 
+	
+	\textit{Methods:}
+	
+	\begin{itemize}
+	 \item \textbf{Rule Based} methods use hand crafted rules based on lexical knowledge to 
+	 \item \textbf{Classification} learning: can use many classic models
+	 \item \textbf{Sequence Labelling}: like other NLP problems, sequence labelling has tokens (words) assigned labels (POS tags), and considers neighbouring words as relevant information. Challenges: because each assignment is a seperate classification task, it is difficult to \textit{collectively} assign the most likely group of tags because assignments are independent. Therefore a holistic approach is necessary. 
+	\end{itemize}
 	
 	\subsection{Hidden Markov Models}
 	Suppose there are T tags (hidden states). An HMM will require a transition matrix giving the probability of any tag occurring after any other tag. This will be an T x T matrix of probabilities (we can compute this similarly to the bigram model, using the bigram assumption) called the \textbf{transition matrix}
@@ -244,6 +253,10 @@
 	\\
 	We can also perform semi-supervised learning to exploit small amounts of labelled training data.
 	
+	\subsection{EM for POS Tagging}
+	
+	An iterative approach can use a forward/ backward algorithm like Viterbi from above to classify instances based on initial random values, then re-compute the probabilities using maximum likelyhood based on the classification. Repeat above steps until convergence.
+	
 	\clearpage
 	\section{Statistical Parsing}
 	
@@ -286,8 +299,6 @@
 	 \item \textbf{Morphology} - languages with polysynthetic structures make it harder to represent the language as sets of words, because a single word can represent an entire sentence.   
 	\end{itemize}
 	
-	
-	
 	\textbf{Vauqouis Triangle}:
 	
 	\begin{itemize}
@@ -296,6 +307,19 @@
 		\item SRL \& WSD - Semantic Structure
 		\item Semantic Parsing -  Interlingua
 	\end{itemize}
+	
+	\subsection{Statistical Machine Translation}
+	
+	The two qualities 
+	
+	
+	\subsection{Noisy Channel Model}
+	
+	Splits the issue 
+	
+	\subsection{Phrase Based Model}
+	
+	\subsection{Word Alignment and IBM Models}
 	
 	\clearpage
 	\section{Neural Machine Translation}
@@ -419,8 +443,6 @@
 
 	\textbf{Anaphora}: specifically when pronouns refer to previously refered concepts
 	
-	\subsection{Hobb's naive algorithm}
-	
 	\clearpage
 	\section{Vector Space Semantics}
     
@@ -433,12 +455,20 @@
      \item Inverse document frequency: $idf_i = log_2(\frac{N}{df_i})$, where N is the number of documents, $df_i$ is the number of documents containing term i. Log is for smoothing. Higher values for more unusual terms. $idf_i \in [0, \infty]$. E.g. when a word i is in literally every document, $idf_i$ = 0. If a term is in every 16 documents, $idf_i = 4$
      \item Typical tf-idf weighting: $w_{ij} = tf_{ij}idf_j$ for word i in document j.
      \item Cosine Similarity: $$cossim(\hat{a}, \hat{b}) = \frac{\hat{a} \cdot \hat{b}}{|\hat{a}| \cdot |\hat{b}|}$$
-     
+        
      $$cossim(\hat{a}, \hat{b}) 
      = \frac
      {\sum_i^{len(\hat{a})} \hat{a_i} * \hat{b_i}}
      {\sqrt{\sum_i^{len(\hat{a})}\hat{a_i} * \sum_i^{len(b)}\hat{b_i}}}$$
-     
+    
+     \item alternative to tf-idf: PMI (pointwise mutual information) between target word and feature:
+                
+                $$PMI(f,w) = log \frac{P(f, w)}{P(f)P(w)}$$
+                
+                So in the context of vector space semantics, this could replace tf-idf by taking the PMI between the target word for encoding and all other words in the vector embedding. Could be calculated as:
+                
+                $$\frac{freq(w1,w2)}{freq(w1)freq(w2)}$$
+    
     \end{itemize}
     
       \textbf{Distributed Representations}: Bag of words approach above makes extremely large sparse matrices. Need a more compact way of representing...
