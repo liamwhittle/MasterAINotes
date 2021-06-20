@@ -534,6 +534,95 @@
 	
 	Similar to the above examples, but a little more complicated.
 	
+	\section{Misc} 
+	
+    \textit{Example of partial derivative in linear regression with a non linear basis function vector.} \\
+    
+	Let's do an example where $\hat{\phi}$ is a vector of basis functions (same as $\phi$ bold), where $\phi_1: f(x) = x^2$, $\phi_2: f(x) = x^3$ \\
+	
+	In this case, $\phi$ acts on two inputs $x_1$ and $x_2$, along with weights $w_1$ and $w_2$ such that the linear regression model looks like: 
+	$$y = w_1\phi_1(x_1) + w_2\phi_2(x_2)$$
+	
+	If we wanted the derivative with respect of $w_1$ (for a single training example; we can easily expand it to be a sum), we treat all other components as constants and perform the chain rule like so:
+	
+	$$\frac{d}{dw_1}\frac{1}{2}[t - \hat{w} \cdot \hat{\phi}(\hat{x})]^2$$
+	
+	$$= \frac{d}{dw_1}\frac{1}{2}[t - w_1\phi_1x_1 - w_2\phi_2x_2]^2$$
+	
+	
+	$$= -(t - w_1\phi_1x_1 - w_2\phi_2x_2)\phi_1x_1 $$
+	
+	\section{Subject Summary}
+	
+	\subsection{List of Algorithms}
+	
+	\begin{itemize}
+	\item Gradient Descent: batch, stochastic - proof from maximum likelyhood for regression, neural network version 
+	\item K-means 
+	\item EM: Soft, Hard, (and for GMM and Doc Clustering)
+	\item Back-propogation
+	\item Perceptron update
+	\item Boot-strapping
+	\item K-fold cross validation
+	\item SGD
+    \end{itemize}
+	
+	\subsection{Exam Style Questions}
+    
+    \paragraph{Regression}
+    
+    \begin{itemize}
+     \item What are the advantages of sparse models in machine learning? 
+     \item Regularisation: what form of  regularisation functions similarly to early stopping?
+     \item Can L1 Regularisation be used in stochastic gradient desccent? If not, why not? Propose another regularisation technique and how it could be incorporated into SGD.
+     \item Which of the following would constitute a linear regression model:
+        \begin{enumerate}
+         \item $y = w_1x_1 + w_0$
+         \item $y = w_1x_1^ + w_0$
+         \item $y = w_1^2x_1 + w_0$
+         \item $y = w_1^2x_1^2 + w_0^2$
+         \item $y = sin(w_1x_1) + w_0$
+         \item $y = w_1sin(x_1) + w_0$
+        \end{enumerate}
+
+    \end{itemize}
+    
+    \paragraph{Classification}
+    
+    \begin{itemize}
+     \item Write the formula which models the posterior in logistic regression.
+     \item Show how the log likelyhood for logistic regression and how it derives to form the gradient update rule for SGD.
+     \item describe the benefits of using a perceptron over mutliple binary classifiers for multi class classification.
+     \item Logistic Regression is which type of probabilistic model? (Discriminative or Generative?)
+     \item What are the detriments of generative models over discriminative models? 
+    \end{itemize}
+    
+    
+    \paragraph{Unsupervised Learning}
+    
+    \begin{itemize}
+     \item Give formulas for the following in latent variable document clustering: word proportion parameter, document probabilitiy / mixing coefficients ($\phi$)
+     \item What is the mathematical/ algorithmic difference between hard and soft expectation maximisation? 
+     \item What types of data is K-means suitable for? 
+    \end{itemize}
+    
+    \paragraph{Neural Networks}
+    
+    \begin{itemize}
+    \item Autoencoders: under what circumstances does an autoencoder perform effective linear PCA vs non-linear PCA?
+    \item Provide the derivative of the sigmoid activation function.
+    \item For each of the following neural network applications, list the probability distribution which models the underlying problem, and the loss function you would use to train a neural network: regression, classification, multi-class classification.
+    \end{itemize}
+   
+   \paragraph{Big Data}
+
+    \begin{itemize}
+    \item Describe in general terms how any machine learning algorithm can be deployed in parallel.
+    \item What over-head costs are associated with distributed computing versus single machine computing?
+    \item Describe the map and reduce steps in the map reduce algorithm.
+    
+    \end{itemize}
+   
 	
 	% bibliography
 	\bibliographystyle{ieeetran}
